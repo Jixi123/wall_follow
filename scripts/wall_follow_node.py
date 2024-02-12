@@ -98,6 +98,11 @@ class WallFollow(Node):
             drive_msg.drive.speed = 1.0
         else:
             drive_msg.drive.speed = 0.5
+            
+        #delete later
+        drive_msg.drive.speed = 1
+        drive_msg.drive.steering_angle = 0
+        
         self.drive_pub.publish(drive_msg)
         self.get_logger().info("driving at " + str(drive_msg.drive.speed))
         
