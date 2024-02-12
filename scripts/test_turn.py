@@ -26,7 +26,7 @@ class WallFollow(Node):
        
         drive_msg = AckermannDriveStamped()
         # TODO: fill in drive message and publish
-        drive_msg.drive.steering_angle = 0.78
+        drive_msg.drive.steering_angle = 0.36
         drive_msg.drive.speed = 0.5
         self.drive_pub.publish(drive_msg)
 
