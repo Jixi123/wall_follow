@@ -20,6 +20,7 @@ import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Joy
 import time
+             
 WINDOW_WIDTH = 100
 WINDOW_HEIGHT = 100
 def _get_keyboard_control(keys):
@@ -60,6 +61,7 @@ class MinimalPublisher(Node) :
         timer_period = 0.1
         self.timer = self.create_timer(timer_period, self.timer_callback)
         self.i = 0
+
     def timer_callback(self) :
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -70,7 +72,7 @@ class MinimalPublisher(Node) :
         # print(control)
         # msg.buttons = [1,1,1,1,1,1,1,1,1,1,1,1]
         msg.buttons = [1]*12#control[2:]#[control[2],0,0,0,0,0,0,0,0,0,0,0]
-        msg.axes = [-control[1],0.,control[0],1.,1.,-control[0]]
+        msg.axes = [-control[1]/3,-control[1]/3,control[0],1.,1.,-control[0]]
         self.publisher_.publish(msg)
         # print("Published")
 def main(args=None) :
@@ -86,6 +88,7 @@ def main(args=None) :
     rclpy.spin(minimal_publisher)
     minimal_publisher.destroy_node()
     rclpy.shutdown()
+
 if __name__ == '__main__' :
     main()
     pygame.quit()
