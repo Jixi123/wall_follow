@@ -109,7 +109,7 @@ class WallFollow(Node):
         drive_msg = AckermannDriveStamped()
         drive_msg.drive.steering_angle = angle
         drive_msg.drive.speed = self.speed
-
+        self.get_logger().info("ange: " + str(np.degrees(drive_msg.drive.steering_angle)))
         self.ackermann_publisher.publish(drive_msg)
 
     def scan_callback(self, msg):
