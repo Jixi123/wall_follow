@@ -34,8 +34,11 @@ class WallFollow(Node):
         self.prev_t = self.get_clock().now().nanoseconds / 1e9
         self.del_t = 0.0
         self.speed = 0.0
-        self.lookahead = 1.0
-        self.desired_distance = 1.1
+        self.lookahead = 0.5
+        self.desired_distance = 0.7
+        
+        #flag to toggle between left and right wall follow. 1: left wall, -1: right wall 
+        self.flag = 1
 
     def get_range(self, range_data, angle):
         """
@@ -68,8 +71,8 @@ class WallFollow(Node):
             error: calculated error
         """
 
-        a_angle = 45.0 * np.pi / 180.0 
-        b_angle = 90.0 * np.pi / 180.0
+        a_angle = self.flag * 45.0 * np.pi / 180.0 
+        b_angle = self.flag * 90.0 * np.pi / 180.0
 
         a = self.get_range(range_data, a_angle)
         b = self.get_range(range_data, b_angle)
@@ -95,12 +98,12 @@ class WallFollow(Node):
         self.prev_t = t
 
         # Use kp, ki & kd to implement a PID controller
-        angle = -(self.kp * self.error) + (self.kd * (self.error - self.prev_error) / self.del_t) + self.ki * self.integral 
+        angle = self.flag * -(self.kp * self.error) + (self.kd * (self.error - self.prev_error) / self.del_t) + self.ki * self.integral 
 
         # adjust speed according to steering angle
-        if (angle > (20.0 * np.pi / 180.0)):
+        if (np.abs(angle > (20.0 * np.pi / 180.0))):
             self.speed = 0.5
-        elif (angle > (10.0 * np.pi / 180.0)):
+        elif (np.abs(angle > (10.0 * np.pi / 180.0))):
             self.speed = 1.0
         else:
             self.speed = 1.5
